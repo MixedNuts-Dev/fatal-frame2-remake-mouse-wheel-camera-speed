@@ -10,7 +10,8 @@ Created by MixedNuts
 **2.0.0 requires MixedNuts Mod Loader (1.0.0 or later).** 1.x ran on its own via
 `version.dll`; 2.0.0 is a loader plugin.
 
-https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader
+Nexus Mods: https://www.nexusmods.com/fatalframe2crimsonbutterflyremake/mods/26
+GitHub: https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader
 
 ---
 
@@ -31,7 +32,8 @@ https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader
 
 - FATAL FRAME II: Crimson Butterfly REMAKE（Steam 版）
 - MixedNuts Mod Loader 1.0.0 以降（別途導入。ローダーの Releases からダウンロードしてください）
-  https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader
+  Nexus Mods: https://www.nexusmods.com/fatalframe2crimsonbutterflyremake/mods/26
+  GitHub: https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader
 
 ゲームのファイルは一切変更せず、メモリ上の値を書き換えるだけなので、Steam の
 ファイル整合性チェックに引っかかることはありません。
@@ -198,7 +200,8 @@ enormous amount of scrolling. The game has no setting for this.
 - FATAL FRAME II: Crimson Butterfly REMAKE (Steam)
 - MixedNuts Mod Loader 1.0.0 or later (installed separately; download it from the
   loader's Releases)
-  https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader
+  Nexus Mods: https://www.nexusmods.com/fatalframe2crimsonbutterflyremake/mods/26
+  GitHub: https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader
 
 No game files are modified; the mod only changes values in memory, so this will not
 trip Steam's file integrity verification.

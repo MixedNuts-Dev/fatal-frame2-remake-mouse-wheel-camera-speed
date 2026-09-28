@@ -32,7 +32,7 @@ of scrolling. The game has no setting for this.
 **ビルドは不要です。**
 
 1. 先に MixedNuts Mod Loader を導入します（ローダーの
-   [Releases](https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader/releases) から
+   [Releases](https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader/releases) か [Nexus Mods](https://www.nexusmods.com/fatalframe2crimsonbutterflyremake/mods/26) から
    ダウンロードし、ローダーの README に従ってください）
 2. この Mod の [Releases](../../releases) から配布物をダウンロードし、中身の `MixedNuts`
    フォルダを、ゲームのルート（`FatalFrameII.exe` と同じ場所）にそのままコピーします。
@@ -41,7 +41,7 @@ of scrolling. The game has no setting for this.
 **No build required.**
 
 1. Install MixedNuts Mod Loader first (download it from the loader's
-   [Releases](https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader/releases) and
+   [Releases](https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader/releases) or [Nexus Mods](https://www.nexusmods.com/fatalframe2crimsonbutterflyremake/mods/26) and
    follow its README).
 2. Download this mod from [Releases](../../releases) and copy its `MixedNuts` folder into
    the game's root directory (the folder containing `FatalFrameII.exe`). It merges into
