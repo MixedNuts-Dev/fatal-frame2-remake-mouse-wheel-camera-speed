@@ -10,28 +10,14 @@
 // ようにしている（どちらか一方だけ入れても、両方入れても、どの順で入れても動く）。
 
 #include <windows.h>
-#include <cstdint>
 #include <string>
+
+#include <mixednuts/path.hpp>
+#include <mixednuts/proxy.hpp>
 
 namespace {
 
-HMODULE      g_real = nullptr;
 std::wstring g_modDir;
-
-void LoadRealVersion()
-{
-    if (g_real) return;
-    wchar_t path[MAX_PATH]{};
-    GetSystemDirectoryW(path, MAX_PATH);
-    wcscat_s(path, L"\\version.dll");
-    g_real = LoadLibraryW(path);
-}
-
-FARPROC RealProc(const char* name)
-{
-    LoadRealVersion();
-    return g_real ? GetProcAddress(g_real, name) : nullptr;
-}
 
 DWORD WINAPI LoadMod(LPVOID)
 {
@@ -47,21 +33,9 @@ DWORD WINAPI LoadMod(LPVOID)
 // ---- 転送用エクスポート -------------------------------------------------
 //
 // version.dll の関数はどれも整数・ポインタの引数を 8 個以下しか取らず、
-// 浮動小数点の引数も無い。x64 の呼び出し規約では、引数をそのまま 8 個
-// 受け渡せば元の関数と同じに振る舞うので、型ごとに書き分けずに済ませる。
-// エクスポート名は .def で本来の名前に付け替える（windows.h の宣言と衝突しないように）。
+// 浮動小数点の引数も無いので、8 個そのまま受け渡す転送で済ませる（proxy.hpp）。
 
-using Fwd8 = uintptr_t(WINAPI*)(uintptr_t, uintptr_t, uintptr_t, uintptr_t,
-                                uintptr_t, uintptr_t, uintptr_t, uintptr_t);
-
-#define FORWARD(name)                                                              \
-    extern "C" uintptr_t WINAPI Proxy_##name(uintptr_t a, uintptr_t b, uintptr_t c, \
-                                             uintptr_t d, uintptr_t e, uintptr_t f, \
-                                             uintptr_t g, uintptr_t h)              \
-    {                                                                              \
-        static Fwd8 fn = reinterpret_cast<Fwd8>(RealProc(#name));                  \
-        return fn ? fn(a, b, c, d, e, f, g, h) : 0;                                \
-    }
+#define FORWARD(name) MIXEDNUTS_FORWARD(Proxy_##name, #name, 0)
 
 FORWARD(GetFileVersionInfoA)
 FORWARD(GetFileVersionInfoByHandle)
@@ -87,13 +61,8 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID)
     {
         DisableThreadLibraryCalls(hModule);
 
-        wchar_t exe[MAX_PATH]{};
-        GetModuleFileNameW(nullptr, exe, MAX_PATH);
-        std::wstring dir(exe);
-        dir.resize(dir.find_last_of(L'\\') + 1);
-        g_modDir = dir + L"Mods\\wheelspeed\\";
-
-        LoadRealVersion();
+        g_modDir = mixednuts::GameDir() + L"Mods\\wheelspeed\\";
+        mixednuts::proxy::Init(L"version.dll");
 
         // ローダロックを避けるため、Mod 本体は別スレッドで読み込む
         if (HANDLE t = CreateThread(nullptr, 0, LoadMod, nullptr, 0, nullptr))

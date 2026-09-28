@@ -18,187 +18,35 @@
 // 自分で状況を判断できないと分かったため）。コメントは日本語のままにする。
 
 #include <windows.h>
-#include <cstdio>
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
 #include <cmath>
 #include <string>
-#include <vector>
 #include <map>
+
+#include <mixednuts/code.hpp>
+#include <mixednuts/env.hpp>
+#include <mixednuts/ini.hpp>
+#include <mixednuts/log.hpp>
+#include <mixednuts/path.hpp>
 
 namespace {
 
+using mixednuts::Log;
+using mixednuts::code::FindAll;
+using mixednuts::code::Match;
+using mixednuts::code::Pattern;
+using mixednuts::code::Rva;
+
 constexpr char kVersion[] = "1.0.0";
 
-std::wstring g_modDir;
-bool         g_log        = true;
-bool         g_enabled    = true;
-float        g_multiplier = 10.0f;
+bool  g_enabled    = true;
+float g_multiplier = 10.0f;
 
-// ---- ログ ---------------------------------------------------------------
-
-// ログは UTF-8 で書くので、ワイド文字列は明示的に変換する
-std::string Utf8(const wchar_t* w)
-{
-    if (!w || !*w) return std::string();
-    const int n = WideCharToMultiByte(CP_UTF8, 0, w, -1, nullptr, 0, nullptr, nullptr);
-    if (n <= 1) return std::string();
-    std::string s(static_cast<size_t>(n - 1), '\0');
-    WideCharToMultiByte(CP_UTF8, 0, w, -1, &s[0], n, nullptr, nullptr);
-    return s;
-}
-
-void Log(const char* fmt, ...)
-{
-    if (!g_log) return;
-    const std::wstring path = g_modDir + L"wheelspeed.log";
-    const bool isNew = (GetFileAttributesW(path.c_str()) == INVALID_FILE_ATTRIBUTES);
-    FILE* f = nullptr;
-    if (_wfopen_s(&f, path.c_str(), L"a") != 0 || !f) return;
-    if (isNew) fwrite("\xEF\xBB\xBF", 1, 3, f);   // UTF-8 BOM（メモ帳で文字化けしないように）
-
-    SYSTEMTIME st{};
-    GetLocalTime(&st);
-    fprintf(f, "[%02d:%02d:%02d] ", st.wHour, st.wMinute, st.wSecond);
-    va_list ap;
-    va_start(ap, fmt);
-    vfprintf(f, fmt, ap);
-    va_end(ap);
-    fputc('\n', f);
-    fclose(f);
-}
-
-// ---- 環境情報 -----------------------------------------------------------
-//
-// 不具合報告のログだけで、報告者のゲームのビルドがこちらの検証環境と
-// 同じかどうかを判断できるようにする。
-
-std::string ReadTextFile(const wchar_t* path, size_t maxBytes)
-{
-    HANDLE h = CreateFileW(path, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
-                           nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
-    if (h == INVALID_HANDLE_VALUE) return std::string();
-    LARGE_INTEGER sz{};
-    if (!GetFileSizeEx(h, &sz) || sz.QuadPart <= 0)
-    {
-        CloseHandle(h);
-        return std::string();
-    }
-    const size_t n = (static_cast<unsigned long long>(sz.QuadPart) < maxBytes)
-                     ? static_cast<size_t>(sz.QuadPart) : maxBytes;
-    std::string s(n, '\0');
-    DWORD got = 0;
-    const BOOL ok = ReadFile(h, &s[0], static_cast<DWORD>(n), &got, nullptr);
-    CloseHandle(h);
-    if (!ok) return std::string();
-    s.resize(got);
-    return s;
-}
-
-// Steam の acf は `"key"  "value"` 形式
-std::string AcfValue(const std::string& s, const char* key)
-{
-    const std::string k = std::string("\"") + key + "\"";
-    size_t at = s.find(k);
-    if (at == std::string::npos) return std::string();
-    at = s.find('"', at + k.size());
-    if (at == std::string::npos) return std::string();
-    const size_t end = s.find('"', at + 1);
-    if (end == std::string::npos) return std::string();
-    return s.substr(at + 1, end - at - 1);
-}
-
-// buildid はゲームのビルドを一意に示すので、バージョン違いの判定に一番効く。
-//   steamapps\common\FatalFrameII\FatalFrameII.exe
-//   steamapps\appmanifest_3920610.acf
-void LogEnvironment()
-{
-    wchar_t exe[MAX_PATH]{};
-    GetModuleFileNameW(nullptr, exe, MAX_PATH);
-    Log("exe: %s", Utf8(exe).c_str());
-
-    WIN32_FILE_ATTRIBUTE_DATA fad{};
-    if (GetFileAttributesExW(exe, GetFileExInfoStandard, &fad))
-        Log("exe size: %llu bytes",
-            (static_cast<unsigned long long>(fad.nFileSizeHigh) << 32) | fad.nFileSizeLow);
-
-    std::wstring dir(exe);
-    for (int up = 0; up < 3; ++up)   // exe 名 / FatalFrameII / common
-    {
-        const size_t slash = dir.find_last_of(L'\\');
-        if (slash == std::wstring::npos) return;
-        dir.resize(slash);
-    }
-    const std::wstring acf = dir + L"\\appmanifest_3920610.acf";
-    const std::string s = ReadTextFile(acf.c_str(), 64 * 1024);
-    const std::string build = AcfValue(s, "buildid");
-    Log("Steam build: %s", build.empty() ? "? (manifest not found)" : build.c_str());
-}
+inline int32_t ReadI32(const uint8_t* p) { return mixednuts::Rd<int32_t>(p); }
 
 // ---- コードの探索 -------------------------------------------------------
-
-bool GetTextSection(uint8_t*& base, size_t& size)
-{
-    auto mod = reinterpret_cast<uint8_t*>(GetModuleHandleW(nullptr));
-    if (!mod) return false;
-    auto dos = reinterpret_cast<IMAGE_DOS_HEADER*>(mod);
-    if (dos->e_magic != IMAGE_DOS_SIGNATURE) return false;
-    auto nt = reinterpret_cast<IMAGE_NT_HEADERS64*>(mod + dos->e_lfanew);
-    if (nt->Signature != IMAGE_NT_SIGNATURE) return false;
-
-    auto sec = IMAGE_FIRST_SECTION(nt);
-    for (WORD i = 0; i < nt->FileHeader.NumberOfSections; ++i, ++sec)
-    {
-        if (memcmp(sec->Name, ".text", 5) == 0)
-        {
-            base = mod + sec->VirtualAddress;
-            size = sec->Misc.VirtualSize;
-            return true;
-        }
-    }
-    return false;
-}
-
-unsigned long long Rva(const void* p)
-{
-    return static_cast<unsigned long long>(
-        static_cast<const uint8_t*>(p) - reinterpret_cast<uint8_t*>(GetModuleHandleW(nullptr)));
-}
-
-inline int32_t ReadI32(const uint8_t* p)
-{
-    int32_t v = 0;
-    memcpy(&v, p, sizeof(v));
-    return v;
-}
-
-// パターン（mask 0 = ワイルドカード）の出現を数え、最初の位置を返す
-struct Pattern {
-    const uint8_t* bytes;
-    const uint8_t* mask;
-    size_t         len;
-};
-
-bool Match(const uint8_t* p, const Pattern& pat)
-{
-    for (size_t i = 0; i < pat.len; ++i)
-        if (pat.mask[i] && p[i] != pat.bytes[i]) return false;
-    return true;
-}
-
-int FindAll(const uint8_t* base, size_t size, const Pattern& pat, const uint8_t*& first)
-{
-    int n = 0;
-    first = nullptr;
-    const uint8_t head = pat.bytes[0];   // 先頭バイトは必ず固定にしておく
-    for (size_t i = 0; i + pat.len <= size; ++i)
-    {
-        if (base[i] != head || !Match(base + i, pat)) continue;
-        if (n++ == 0) first = base + i;
-    }
-    return n;
-}
 
 // 構造体へのコピー箇所:
 //   call  <表からレコードを引く関数>
@@ -282,7 +130,7 @@ FindResult FindLayout(Layout& out, std::string& why)
 {
     uint8_t* text = nullptr;
     size_t   size = 0;
-    if (!GetTextSection(text, size)) { why = "no .text"; return FindResult::NoText; }
+    if (!mixednuts::code::TextSection(text, size)) { why = "no .text"; return FindResult::NoText; }
 
     const uint8_t* copy = nullptr;
     const int nCopy = FindAll(text, size, {kCopyBytes, kCopyMask, sizeof(kCopyBytes)}, copy);
@@ -437,20 +285,14 @@ int ApplyOnce(const Layout& L, bool& tableSeen)
 
 void LoadConfig(HMODULE self)
 {
-    wchar_t path[MAX_PATH]{};
-    GetModuleFileNameW(self, path, MAX_PATH);
-    std::wstring dir(path);
-    dir.resize(dir.find_last_of(L'\\') + 1);
-    g_modDir = dir;
-
-    const std::wstring ini = dir + L"wheelspeed.ini";
-    g_enabled = GetPrivateProfileIntW(L"General", L"Enabled", 1, ini.c_str()) != 0;
-    g_log     = GetPrivateProfileIntW(L"General", L"Log", 1, ini.c_str()) != 0;
+    namespace ini = mixednuts::ini;
+    const std::wstring dir = mixednuts::ModuleDir(self);
+    const std::wstring file = dir + L"wheelspeed.ini";
+    g_enabled = ini::Bool(file, L"General", L"Enabled", true);
+    mixednuts::log::Open(dir, L"wheelspeed.log", ini::Bool(file, L"General", L"Log", true));
 
     // 小数も書けるように文字列で読む
-    wchar_t buf[64]{};
-    GetPrivateProfileStringW(L"Speed", L"Multiplier", L"10", buf, 64, ini.c_str());
-    const float m = wcstof(buf, nullptr);
+    const float m = wcstof(ini::String(file, L"Speed", L"Multiplier", L"10").c_str(), nullptr);
     g_multiplier = (std::isfinite(m) && m >= 0.1f && m <= 100.0f) ? m : 10.0f;
 }
 
@@ -463,7 +305,7 @@ DWORD WINAPI Worker(LPVOID param)
         Log("[--] Enabled=0, doing nothing");
         return 0;
     }
-    LogEnvironment();
+    mixednuts::env::LogAll();
     Log("Multiplier: %g", g_multiplier);
     if (g_multiplier == 1.0f)
     {
