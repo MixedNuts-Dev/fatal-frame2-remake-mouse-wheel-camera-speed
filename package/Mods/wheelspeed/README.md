@@ -5,6 +5,13 @@ A mod for FATAL FRAME / PROJECT ZERO II: Crimson Butterfly REMAKE.
 
 Created by MixedNuts
 
+**2.0.0 から MixedNuts Mod Loader（1.0.0 以降）が必要です。** 1.x は `version.dll` で
+単独で動作していましたが、2.0.0 はローダーのプラグインです。
+**2.0.0 requires MixedNuts Mod Loader (1.0.0 or later).** 1.x ran on its own via
+`version.dll`; 2.0.0 is a loader plugin.
+
+https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader
+
 ---
 
 # 日本語
@@ -23,53 +30,76 @@ Created by MixedNuts
 ## 動作環境
 
 - FATAL FRAME II: Crimson Butterfly REMAKE（Steam 版）
+- MixedNuts Mod Loader 1.0.0 以降（別途導入。ローダーの Releases からダウンロードしてください）
+  https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader
 
-ゲームのファイルは一切変更しないため、Steam のファイル整合性チェックに
-引っかかることはありません。
+ゲームのファイルは一切変更せず、メモリ上の値を書き換えるだけなので、Steam の
+ファイル整合性チェックに引っかかることはありません。
 
 ## 同梱ファイル
 
 | ファイル | 役割 |
 |---|---|
-| `version.dll` | ローダー |
-| `Mods\wheelspeed\wheelspeed.dll` | 本体 |
-| `Mods\wheelspeed\wheelspeed.ini` | 設定ファイル |
-| `Mods\wheelspeed\README.md` | このファイル |
+| `MixedNuts\Mods\wheelspeed\wheelspeed.dll` | 本体 |
+| `MixedNuts\Mods\wheelspeed\wheelspeed.ini` | 設定ファイル |
+| `MixedNuts\Mods\wheelspeed\README.md` | このファイル |
+| `MixedNuts\Mods\wheelspeed\LICENSE.txt` | ライセンス |
 
-このうち **`version.dll` と `Mods` フォルダの 2 つ**をコピーします。
-起動すると `Mods\wheelspeed\` の中にログ `wheelspeed.log` が作られます。
+**`MixedNuts` フォルダ**をコピーします。ローダー本体（`dinput8.dll` と
+`MixedNuts\MixedNutsLoader.dll`）は同梱していません。
+起動すると `MixedNuts\Mods\wheelspeed\` の中にログ `wheelspeed.log` が作られます。
 
 ### 他の Mod との併用
 
-**Native 120FPS Option とは干渉しません。** あちらは `dinput8.dll`、こちらは
-`version.dll` を使うので、両方入れても、どちらか一方だけでも、どの順番で
-入れても動作します。`Mods` フォルダは中身が合流するだけです。
+**Native 120FPS Option、Mouse Wheel Camera Speed、TwinSwap の 2.0.0 は、すべて同じ
+ローダーの上で動きます。** DLL を 1 つ共有するので、競合することはありません。
+`MixedNuts` フォルダは中身が合流するだけです。
 
-ゲームのルートに **別の `version.dll` が既にある場合は、上書きしないでください。**
-他のツールが同じ名前を使っている可能性があります。
+ゲームのルートに **別の Mod の `dinput8.dll` が既にある場合は、上書きしないでください。**
+ローダーの `dinput8.dll` は `version.dll` または `xinput1_4.dll` に名前を変えて使えます
+（ローダーの README を参照してください）。
 
 ## 導入方法
 
 1. ゲームを終了します
 
-2. 同梱の `version.dll` と `Mods` フォルダを、ゲームのルートディレクトリ
-   （`FatalFrameII.exe` と同じ場所）にそのままコピーします
+2. MixedNuts Mod Loader を導入します（ローダーの README に従ってください）
+
+3. 同梱の `MixedNuts` フォルダを、ゲームのルートディレクトリ
+   （`FatalFrameII.exe` と同じ場所）にそのままコピーします。
+   ローダーの `MixedNuts` フォルダに中身が合流します
 
    ```
-   ...\steamapps\common\FatalFrameII\FatalFrameII.exe
-   ...\steamapps\common\FatalFrameII\version.dll        ← 追加
-   ...\steamapps\common\FatalFrameII\Mods\wheelspeed\   ← 追加
+   ...\FatalFrameII\FatalFrameII.exe
+   ...\FatalFrameII\dinput8.dll                                ← ローダー
+   ...\FatalFrameII\MixedNuts\MixedNutsLoader.dll              ← ローダー
+   ...\FatalFrameII\MixedNuts\Mods\wheelspeed\wheelspeed.dll   ← この Mod
+   ...\FatalFrameII\MixedNuts\Mods\wheelspeed\wheelspeed.ini
+   ...\FatalFrameII\MixedNuts\Mods\wheelspeed\wheelspeed.log   ← 起動時に生成
    ```
 
    ゲームフォルダの開き方：Steam ライブラリでタイトルを右クリック →
    **管理** → **ローカルファイルを閲覧**
 
-3. ゲームを起動し、射影機を構えてホイールを回してみてください
+4. ゲームを起動し、射影機を構えてホイールを回してみてください
+
+### 1.x からの更新
+
+導入の前に、ゲームのルートから古い `version.dll` と古い `Mods\wheelspeed\` フォルダを
+削除してください。1.x の `version.dll` が残っていると、ローダーは新しい Mod を読み込まず、
+`MixedNuts\loader.log` に `[!!]` で始まるメッセージを書き出します。
+
+Native 120FPS Option（`dinput8.dll` + `Mods\native120fps\`）や TwinSwap
+（`xinput1_4.dll` + `Mods\twinswap\`）の 1.x も入れている場合は、まとめて更新してください。
+詳しくはローダーの README を参照してください。
 
 ## 削除方法
 
-`version.dll` と `Mods\wheelspeed` フォルダを削除するだけです。
+`MixedNuts\Mods\wheelspeed\` フォルダを削除するだけです。
 ゲームのファイルは一切変更していないため、完全に元に戻ります。
+
+ローダーは他の Mod のために残しておけます。すべて取り除く場合は、ローダー
+（`dinput8.dll` と `MixedNuts` フォルダ）も削除してください。
 
 一時的に無効化したい場合は、`wheelspeed.ini` の `Enabled` を `0` にしてください。
 
@@ -107,14 +137,20 @@ Created by MixedNuts
 
 ## うまく動かないとき
 
-1. `version.dll` がゲームのルート（`FatalFrameII.exe` と同じ場所）にあるか。
-   **`Mods` フォルダの中ではありません**
-2. `Mods\wheelspeed\` の中に `wheelspeed.dll` があるか。
-   フォルダ名・ファイル名を変更していないか
-3. `Mods\wheelspeed\` に `wheelspeed.log` が生成されているか。
-   生成されていなければ `version.dll` が読み込まれていません
+1. ローダーが導入されているか。ゲームのルート（`FatalFrameII.exe` と同じ場所）に
+   `dinput8.dll` があり、`MixedNuts\MixedNutsLoader.dll` があるか
+2. `MixedNuts\loader.log` があり、次の行が出ているか
 
-ログに次の行が出ていれば正常に適用されています（ログは英語で出力されます）。
+   ```
+   [OK] wheelspeed: loaded (0 file patches)
+   ```
+
+   `loader.log` がなければ、ローダーが読み込まれていません。
+   行がなければ、フォルダ名・ファイル名が `MixedNuts\Mods\wheelspeed\wheelspeed.dll`
+   になっているかを確認し、`[!!]` や `[NG]` で始まる行を探してください
+3. `MixedNuts\Mods\wheelspeed\` に `wheelspeed.log` が生成されているか
+
+`wheelspeed.log` に次の行が出ていれば正常に適用されています（ログは英語で出力されます）。
 
 ```
 [OK] Code located: ...
@@ -124,7 +160,10 @@ Created by MixedNuts
 ```
 
 これらの行は、ゲームの起動から数秒で出ます。
-不具合を報告するときは、GitHub の Issue で `wheelspeed.log` を添付してください。
+ログには、ゲームのバージョン、Steam のビルド、ディスプレイ、GPU、OS、ロケールなどの
+環境情報も記録されます。
+不具合を報告するときは、GitHub の Issue で `MixedNuts\Mods\wheelspeed\wheelspeed.log` と
+`MixedNuts\loader.log` の両方を添付してください。
 
 https://github.com/MixedNuts-Dev/fatal-frame2-remake-mouse-wheel-camera-speed/issues
 
@@ -157,52 +196,76 @@ enormous amount of scrolling. The game has no setting for this.
 ## Requirements
 
 - FATAL FRAME II: Crimson Butterfly REMAKE (Steam)
+- MixedNuts Mod Loader 1.0.0 or later (installed separately; download it from the
+  loader's Releases)
+  https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader
 
-No game files are modified, so this will not trip Steam's file integrity verification.
+No game files are modified; the mod only changes values in memory, so this will not
+trip Steam's file integrity verification.
 
 ## What's included
 
 | File | Role |
 |---|---|
-| `version.dll` | loader |
-| `Mods\wheelspeed\wheelspeed.dll` | the mod itself |
-| `Mods\wheelspeed\wheelspeed.ini` | configuration |
-| `Mods\wheelspeed\README.md` | this file |
+| `MixedNuts\Mods\wheelspeed\wheelspeed.dll` | the mod itself |
+| `MixedNuts\Mods\wheelspeed\wheelspeed.ini` | configuration |
+| `MixedNuts\Mods\wheelspeed\README.md` | this file |
+| `MixedNuts\Mods\wheelspeed\LICENSE.txt` | license |
 
-You copy two things: **`version.dll` and the `Mods` folder.**
-A log, `wheelspeed.log`, is created in `Mods\wheelspeed\` when the game runs.
+You copy **the `MixedNuts` folder.** The loader itself (`dinput8.dll` and
+`MixedNuts\MixedNutsLoader.dll`) is not included.
+A log, `wheelspeed.log`, is created in `MixedNuts\Mods\wheelspeed\` when the game runs.
 
 ### Using it with other mods
 
-**It does not interfere with Native 120FPS Option.** That mod uses `dinput8.dll` and
-this one uses `version.dll`, so either or both can be installed, in any order. The
-`Mods` folders simply merge.
+**Native 120FPS Option, Mouse Wheel Camera Speed and TwinSwap 2.0.0 all run on the
+same loader.** They share one DLL, so they never conflict. The `MixedNuts` folders
+simply merge.
 
-If the game folder **already contains a different `version.dll`, do not overwrite
-it.** Another tool may be using the same name.
+If the game folder **already contains another mod's `dinput8.dll`, do not overwrite
+it.** The loader's `dinput8.dll` can be renamed to `version.dll` or `xinput1_4.dll`
+(see the loader's README).
 
 ## Installation
 
 1. Close the game.
 
-2. Copy `version.dll` and the `Mods` folder into the game's root directory
-   (the folder containing `FatalFrameII.exe`).
+2. Install MixedNuts Mod Loader (follow the loader's README).
+
+3. Copy the `MixedNuts` folder into the game's root directory (the folder containing
+   `FatalFrameII.exe`). It merges into the loader's `MixedNuts` folder.
 
    ```
-   ...\steamapps\common\FatalFrameII\FatalFrameII.exe
-   ...\steamapps\common\FatalFrameII\version.dll        <- added
-   ...\steamapps\common\FatalFrameII\Mods\wheelspeed\   <- added
+   ...\FatalFrameII\FatalFrameII.exe
+   ...\FatalFrameII\dinput8.dll                                <- loader
+   ...\FatalFrameII\MixedNuts\MixedNutsLoader.dll              <- loader
+   ...\FatalFrameII\MixedNuts\Mods\wheelspeed\wheelspeed.dll   <- this mod
+   ...\FatalFrameII\MixedNuts\Mods\wheelspeed\wheelspeed.ini
+   ...\FatalFrameII\MixedNuts\Mods\wheelspeed\wheelspeed.log   <- generated at launch
    ```
 
    To open the game folder: right-click the title in your Steam library →
    **Manage** → **Browse local files**
 
-3. Launch the game, raise the Camera Obscura and scroll.
+4. Launch the game, raise the Camera Obscura and scroll.
+
+### Upgrading from 1.x
+
+Before installing, delete the old `version.dll` and the old `Mods\wheelspeed\` folder
+from the game root. If the 1.x `version.dll` is still there, the loader does not load
+the new mod and writes a message starting with `[!!]` to `MixedNuts\loader.log`.
+
+If you also have the 1.x versions of Native 120FPS Option (`dinput8.dll` +
+`Mods\native120fps\`) or TwinSwap (`xinput1_4.dll` + `Mods\twinswap\`), update them all
+at once. See the loader's README for details.
 
 ## Uninstallation
 
-Delete `version.dll` and the `Mods\wheelspeed` folder. No game files are modified,
-so removal restores the original state completely.
+Delete the `MixedNuts\Mods\wheelspeed\` folder. No game files are modified, so removal
+restores the original state completely.
+
+The loader can stay for other mods. To remove everything, also delete the loader
+(`dinput8.dll` and the `MixedNuts` folder).
 
 To disable temporarily, set `Enabled` to `0` in `wheelspeed.ini`.
 
@@ -239,14 +302,21 @@ loss of save data, game malfunction, or any other problem. Use it at your own ri
 
 ## If it doesn't work
 
-1. Is `version.dll` in the game's root folder (next to `FatalFrameII.exe`)?
-   **It does not go inside the `Mods` folder**
-2. Is `wheelspeed.dll` present in `Mods\wheelspeed\`?
-   Have the folder or file names been changed?
-3. Has `wheelspeed.log` been created in `Mods\wheelspeed\`?
-   If not, `version.dll` is not being loaded
+1. Is the loader installed? Is `dinput8.dll` in the game's root folder (next to
+   `FatalFrameII.exe`), and is `MixedNuts\MixedNutsLoader.dll` present?
+2. Does `MixedNuts\loader.log` exist and contain this line?
 
-If the log contains lines like these, the mod is working:
+   ```
+   [OK] wheelspeed: loaded (0 file patches)
+   ```
+
+   If `loader.log` is missing, the loader is not being loaded.
+   If the line is missing, check that the folder and file names are exactly
+   `MixedNuts\Mods\wheelspeed\wheelspeed.dll`, and look for lines starting with `[!!]`
+   or `[NG]`
+3. Has `wheelspeed.log` been created in `MixedNuts\Mods\wheelspeed\`?
+
+If `wheelspeed.log` contains lines like these, the mod is working:
 
 ```
 [OK] Code located: ...
@@ -256,7 +326,10 @@ If the log contains lines like these, the mod is working:
 ```
 
 These lines appear within a few seconds of launching the game.
-When reporting a problem, please open a GitHub Issue and attach `wheelspeed.log`.
+The log also records environment information such as the game version, Steam build,
+display, GPU, OS and locale.
+When reporting a problem, please open a GitHub Issue and attach both
+`MixedNuts\Mods\wheelspeed\wheelspeed.log` and `MixedNuts\loader.log`.
 
 https://github.com/MixedNuts-Dev/fatal-frame2-remake-mouse-wheel-camera-speed/issues
 

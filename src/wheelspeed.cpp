@@ -14,6 +14,9 @@
 // 表の位置とレコード内のオフセットは、ビルド差に備えてコードから実行時に割り出す。
 // ゲームのファイルは一切変更しない。
 //
+// MixedNuts Mod Loader のプラグインとして MixedNuts\Mods\wheelspeed\ に置く
+// （2.0.0 から。1.x は version.dll のプロキシで単独で動いていた）。
+//
 // ログは英語で書く（Native 120FPS Option の 1.0.1 で、日本語のログでは利用者が
 // 自分で状況を判断できないと分かったため）。コメントは日本語のままにする。
 
@@ -25,11 +28,11 @@
 #include <string>
 #include <map>
 
+#include <mixednuts/plugin.h>
 #include <mixednuts/code.hpp>
 #include <mixednuts/env.hpp>
 #include <mixednuts/ini.hpp>
 #include <mixednuts/log.hpp>
-#include <mixednuts/path.hpp>
 
 namespace {
 
@@ -39,7 +42,7 @@ using mixednuts::code::Match;
 using mixednuts::code::Pattern;
 using mixednuts::code::Rva;
 
-constexpr char kVersion[] = "1.0.0";
+constexpr char kVersion[] = "2.0.0";
 
 bool  g_enabled    = true;
 float g_multiplier = 10.0f;
@@ -283,10 +286,9 @@ int ApplyOnce(const Layout& L, bool& tableSeen)
 
 // ---- 設定読み込み -------------------------------------------------------
 
-void LoadConfig(HMODULE self)
+void LoadConfig(const std::wstring& dir)
 {
     namespace ini = mixednuts::ini;
-    const std::wstring dir = mixednuts::ModuleDir(self);
     const std::wstring file = dir + L"wheelspeed.ini";
     g_enabled = ini::Bool(file, L"General", L"Enabled", true);
     mixednuts::log::Open(dir, L"wheelspeed.log", ini::Bool(file, L"General", L"Log", true));
@@ -296,9 +298,8 @@ void LoadConfig(HMODULE self)
     g_multiplier = (std::isfinite(m) && m >= 0.1f && m <= 100.0f) ? m : 10.0f;
 }
 
-DWORD WINAPI Worker(LPVOID param)
+DWORD WINAPI Worker(LPVOID)
 {
-    LoadConfig(static_cast<HMODULE>(param));
     Log("=== Mouse Wheel Camera Speed %s / Created by MixedNuts ===", kVersion);
     if (!g_enabled)
     {
@@ -351,13 +352,19 @@ DWORD WINAPI Worker(LPVOID param)
 
 } // namespace
 
+// MixedNuts Mod Loader から、ゲームのコードが動く前に呼ばれる。
+// ファイルは改変しないので登録は無く、コードの探索を別スレッドで始めるだけ。
+MIXEDNUTS_PLUGIN_EXPORT int WINAPI MixedNutsPluginInit(const MixedNutsApi* api)
+{
+    if (!api || api->version < MIXEDNUTS_API_VERSION) return 0;
+    LoadConfig(api->pluginDir);
+    if (HANDLE t = CreateThread(nullptr, 0, Worker, nullptr, 0, nullptr))
+        CloseHandle(t);
+    return 1;
+}
+
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID)
 {
-    if (reason == DLL_PROCESS_ATTACH)
-    {
-        DisableThreadLibraryCalls(hModule);
-        if (HANDLE t = CreateThread(nullptr, 0, Worker, hModule, 0, nullptr))
-            CloseHandle(t);
-    }
+    if (reason == DLL_PROCESS_ATTACH) DisableThreadLibraryCalls(hModule);
     return TRUE;
 }

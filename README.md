@@ -19,39 +19,92 @@ repeats every frame while the button is held, so it feels fine, but a mouse whee
 counts as a single input, so going from one end to the other takes an enormous amount
 of scrolling. The game has no setting for this.
 
+> **2.0.0 から [MixedNuts Mod Loader](https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader)
+> （1.0.0 以降）が必要です。** ローダーは別途導入してください。1.x は `version.dll` で
+> 単独で動作していましたが、2.0.0 はローダーのプラグインになり、`version.dll` は同梱していません。
+>
+> **2.0.0 requires [MixedNuts Mod Loader](https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader)
+> (1.0.0 or later)**, installed separately. 1.x ran on its own via `version.dll`; 2.0.0 is a
+> loader plugin and no longer ships `version.dll`.
+
 ## 導入 / Installation
 
-**ビルドは不要です。** [Releases](../../releases) から配布物をダウンロードし、
-中身の `version.dll` と `Mods` フォルダを、ゲームのルート（`FatalFrameII.exe` と
-同じ場所）にそのままコピーするだけです。
+**ビルドは不要です。**
 
-**No build required.** Download the archive from [Releases](../../releases) and copy
-`version.dll` and the `Mods` folder into the game's root directory (the folder
-containing `FatalFrameII.exe`).
+1. 先に MixedNuts Mod Loader を導入します（ローダーの
+   [Releases](https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader/releases) から
+   ダウンロードし、ローダーの README に従ってください）
+2. この Mod の [Releases](../../releases) から配布物をダウンロードし、中身の `MixedNuts`
+   フォルダを、ゲームのルート（`FatalFrameII.exe` と同じ場所）にそのままコピーします。
+   ローダーの `MixedNuts` フォルダに中身が合流します
+
+**No build required.**
+
+1. Install MixedNuts Mod Loader first (download it from the loader's
+   [Releases](https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader/releases) and
+   follow its README).
+2. Download this mod from [Releases](../../releases) and copy its `MixedNuts` folder into
+   the game's root directory (the folder containing `FatalFrameII.exe`). It merges into
+   the loader's `MixedNuts` folder.
 
 ```
 FatalFrameII/
   FatalFrameII.exe
-  version.dll                        <- added
-  Mods/wheelspeed/wheelspeed.dll     <- added
-  Mods/wheelspeed/wheelspeed.ini
-  Mods/wheelspeed/README.md
-  Mods/wheelspeed/wheelspeed.log     <- 起動時に生成 / generated at launch
+  dinput8.dll                                <- MixedNuts Mod Loader
+  MixedNuts/MixedNutsLoader.dll              <- MixedNuts Mod Loader
+  MixedNuts/Mods/wheelspeed/wheelspeed.dll   <- この Mod / this mod
+  MixedNuts/Mods/wheelspeed/wheelspeed.ini
+  MixedNuts/Mods/wheelspeed/README.md
+  MixedNuts/Mods/wheelspeed/wheelspeed.log   <- 起動時に生成 / generated at launch
 ```
 
-削除は 2 つを消すだけです。 / To uninstall, just delete them.
+ゲームのファイルは一切変更しません。メモリ上の値を書き換えるだけです。
+No game files are modified; the mod only changes values in memory.
 
-## Native 120FPS Option との併用 / Using it with Native 120FPS Option
+削除は `MixedNuts\Mods\wheelspeed\` を消すだけです。ローダーは他の Mod のために
+残しておけます。すべて取り除く場合は、ローダー（`dinput8.dll` と `MixedNuts` フォルダ）も
+削除してください。一時的に無効化するには、`wheelspeed.ini` の `Enabled` を `0` にします。
 
-**干渉しません。** Native 120FPS Option は `dinput8.dll`、この Mod は `version.dll` を
-使うため、どちらか一方だけでも、両方でも、どの順番で入れても動作します。
+To uninstall, delete `MixedNuts\Mods\wheelspeed\`. The loader can stay for other mods;
+to remove everything, also delete the loader (`dinput8.dll` and the `MixedNuts` folder).
+To disable temporarily, set `Enabled=0` in `wheelspeed.ini`.
 
-**They do not interfere.** Native 120FPS Option uses `dinput8.dll` and this mod uses
-`version.dll`, so either or both can be installed, in any order.
+### 1.x からの更新 / Upgrading from 1.x
+
+導入の前に、ゲームのルートから古い `version.dll` と古い `Mods\wheelspeed\` フォルダを
+削除してください。1.x の `version.dll` が残っていると、ローダーは新しい Mod を読み込まず、
+`MixedNuts\loader.log` に `[!!]` で始まるメッセージを書き出します。
+
+Native 120FPS Option（`dinput8.dll` + `Mods\native120fps\`）や TwinSwap
+（`xinput1_4.dll` + `Mods\twinswap\`）の 1.x も入れている場合は、まとめて更新してください。
+詳しくはローダーの README を参照してください。
+
+Before installing, delete the old `version.dll` and the old `Mods\wheelspeed\` folder
+from the game root. If the 1.x `version.dll` is still there, the loader does not load
+the new mod and writes a message starting with `[!!]` to `MixedNuts\loader.log`.
+
+If you also have the 1.x versions of Native 120FPS Option (`dinput8.dll` +
+`Mods\native120fps\`) or TwinSwap (`xinput1_4.dll` + `Mods\twinswap\`), update them all
+at once. See the loader's README for details.
+
+## 他の MixedNuts の Mod との併用 / Using it with other MixedNuts mods
+
+**干渉しません。** Native 120FPS Option、Mouse Wheel Camera Speed、TwinSwap の 2.0.0 は
+すべて同じローダーの上で動くため、DLL を 1 つ共有し、競合することはありません。
+
+**They do not conflict.** Native 120FPS Option, Mouse Wheel Camera Speed and TwinSwap
+2.0.0 all run on the same loader, so they share one DLL.
+
+別の Mod が既に `dinput8.dll` を使っている場合は、上書きしないでください。ローダーの
+`dinput8.dll` は `version.dll` または `xinput1_4.dll` に名前を変えて使えます（ローダーの
+README を参照）。
+
+If another mod already uses `dinput8.dll`, do not overwrite it. The loader's
+`dinput8.dll` can be renamed to `version.dll` or `xinput1_4.dll` (see the loader's README).
 
 ## 設定 / Configuration
 
-`Mods\wheelspeed\wheelspeed.ini`
+`MixedNuts\Mods\wheelspeed\wheelspeed.ini`
 
 | 項目 / Key | 意味 / Meaning |
 |---|---|
@@ -80,7 +133,13 @@ build.bat
 
 clone 済みなら / If already cloned: `git submodule update --init`
 
-`dist\` に配布用の一式が出力されます。 / The distributable set is written to `dist\`.
+`dist\MixedNuts\Mods\wheelspeed\` に配布用の一式が出力されます。
+The distributable set is written to `dist\MixedNuts\Mods\wheelspeed\`.
+
+submodule の代わりに手元の mod-loader を使う場合は、環境変数 `MIXEDNUTS_LOADER` に
+その場所を指定してから `build.bat` を実行してください。
+To build against a local checkout of mod-loader instead of the submodule, set the
+environment variable `MIXEDNUTS_LOADER` to its path before running `build.bat`.
 
 ## 仕組み / How it works
 
@@ -149,11 +208,35 @@ of save data, game malfunction, or any other problem. Use it at your own risk.
 
 ## 不具合の報告 / Reporting issues
 
-不具合を見つけた場合は、GitHub の Issue でご報告ください。その際、**必ず
-`Mods\wheelspeed\wheelspeed.log` を添付してください。**
+うまく動かないときは、次を確認してください。
 
-If you run into a problem, please open a GitHub Issue. **Be sure to attach
-`Mods\wheelspeed\wheelspeed.log`.**
+1. ローダーが導入されているか（ゲームのルートに `dinput8.dll`、
+   `MixedNuts\MixedNutsLoader.dll` があるか）
+2. `MixedNuts\loader.log` があり、`[OK] wheelspeed: loaded` の行が出ているか。
+   `loader.log` がなければローダーが読み込まれていません。行がなければ、フォルダ名・
+   ファイル名が `MixedNuts\Mods\wheelspeed\wheelspeed.dll` になっているかを確認し、
+   `[!!]` や `[NG]` の行を探してください
+3. `MixedNuts\Mods\wheelspeed\wheelspeed.log` が生成されているか
+
+If it does not work, check the following:
+
+1. Is the loader installed (`dinput8.dll` in the game root, and
+   `MixedNuts\MixedNutsLoader.dll` present)?
+2. Does `MixedNuts\loader.log` exist and contain the `[OK] wheelspeed: loaded` line?
+   If `loader.log` is missing, the loader is not being loaded. If the line is missing,
+   check that the path is exactly `MixedNuts\Mods\wheelspeed\wheelspeed.dll`, and look
+   for lines starting with `[!!]` or `[NG]`.
+3. Has `MixedNuts\Mods\wheelspeed\wheelspeed.log` been created?
+
+不具合を見つけた場合は、GitHub の Issue でご報告ください。その際、**必ず
+`MixedNuts\Mods\wheelspeed\wheelspeed.log` と `MixedNuts\loader.log` の両方を
+添付してください。** `wheelspeed.log` には、ゲームのバージョン、Steam のビルド、
+ディスプレイ、GPU、OS、ロケールなどの環境情報も記録されます。
+
+If you run into a problem, please open a GitHub Issue. **Be sure to attach both
+`MixedNuts\Mods\wheelspeed\wheelspeed.log` and `MixedNuts\loader.log`.**
+`wheelspeed.log` also records environment information such as the game version, Steam
+build, display, GPU, OS and locale.
 
 ---
 
