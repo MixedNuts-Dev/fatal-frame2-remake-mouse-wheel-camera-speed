@@ -1,13 +1,13 @@
-# Mouse Wheel Camera Speed
+# MouseWheelCameraSpeed
 
 **FATAL FRAME II: Crimson Butterfly REMAKE** 用の Mod です。
 A mod for FATAL FRAME / PROJECT ZERO II: Crimson Butterfly REMAKE.
 
 Created by MixedNuts
 
-**2.0.0 から MixedNuts Mod Loader（1.0.0 以降）が必要です。** 1.x は `version.dll` で
+**2.0.0 から MixedNutsModLoader（1.0.0 以降）が必要です。** 1.x は `version.dll` で
 単独で動作していましたが、2.0.0 はローダーのプラグインです。
-**2.0.0 requires MixedNuts Mod Loader (1.0.0 or later).** 1.x ran on its own via
+**2.0.0 requires MixedNutsModLoader (1.0.0 or later).** 1.x ran on its own via
 `version.dll`; 2.0.0 is a loader plugin.
 
 Nexus Mods: https://www.nexusmods.com/fatalframe2crimsonbutterflyremake/mods/26
@@ -31,7 +31,7 @@ GitHub: https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader
 ## 動作環境
 
 - FATAL FRAME II: Crimson Butterfly REMAKE（Steam 版）
-- MixedNuts Mod Loader 1.0.0 以降（別途導入。ローダーの Releases からダウンロードしてください）
+- MixedNutsModLoader 1.0.0 以降（別途導入。ローダーの Releases からダウンロードしてください）
   Nexus Mods: https://www.nexusmods.com/fatalframe2crimsonbutterflyremake/mods/26
   GitHub: https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader
 
@@ -53,7 +53,7 @@ GitHub: https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader
 
 ### 他の Mod との併用
 
-**Native 120FPS Option、Mouse Wheel Camera Speed、TwinSwap の 2.0.0 は、すべて同じ
+**Native120FPSOption、MouseWheelCameraSpeed、TwinSwap の 2.0.0 は、すべて同じ
 ローダーの上で動きます。** DLL を 1 つ共有するので、競合することはありません。
 `MixedNuts` フォルダは中身が合流するだけです。
 
@@ -65,7 +65,7 @@ GitHub: https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader
 
 1. ゲームを終了します
 
-2. MixedNuts Mod Loader を導入します（ローダーの README に従ってください）
+2. MixedNutsModLoader を導入します（ローダーの README に従ってください）
 
 3. 同梱の `MixedNuts` フォルダを、ゲームのルートディレクトリ
    （`FatalFrameII.exe` と同じ場所）にそのままコピーします。
@@ -91,7 +91,7 @@ GitHub: https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader
 削除してください。1.x の `version.dll` が残っていると、ローダーは新しい Mod を読み込まず、
 `MixedNuts\loader.log` に `[!!]` で始まるメッセージを書き出します。
 
-Native 120FPS Option（`dinput8.dll` + `Mods\native120fps\`）や TwinSwap
+Native120FPSOption（`dinput8.dll` + `Mods\native120fps\`）や TwinSwap
 （`xinput1_4.dll` + `Mods\twinswap\`）の 1.x も入れている場合は、まとめて更新してください。
 詳しくはローダーの README を参照してください。
 
@@ -198,7 +198,7 @@ enormous amount of scrolling. The game has no setting for this.
 ## Requirements
 
 - FATAL FRAME II: Crimson Butterfly REMAKE (Steam)
-- MixedNuts Mod Loader 1.0.0 or later (installed separately; download it from the
+- MixedNutsModLoader 1.0.0 or later (installed separately; download it from the
   loader's Releases)
   Nexus Mods: https://www.nexusmods.com/fatalframe2crimsonbutterflyremake/mods/26
   GitHub: https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader
@@ -221,7 +221,7 @@ A log, `wheelspeed.log`, is created in `MixedNuts\Mods\wheelspeed\` when the gam
 
 ### Using it with other mods
 
-**Native 120FPS Option, Mouse Wheel Camera Speed and TwinSwap 2.0.0 all run on the
+**Native120FPSOption, MouseWheelCameraSpeed and TwinSwap 2.0.0 all run on the
 same loader.** They share one DLL, so they never conflict. The `MixedNuts` folders
 simply merge.
 
@@ -233,7 +233,7 @@ it.** The loader's `dinput8.dll` can be renamed to `version.dll` or `xinput1_4.d
 
 1. Close the game.
 
-2. Install MixedNuts Mod Loader (follow the loader's README).
+2. Install MixedNutsModLoader (follow the loader's README).
 
 3. Copy the `MixedNuts` folder into the game's root directory (the folder containing
    `FatalFrameII.exe`). It merges into the loader's `MixedNuts` folder.
@@ -258,7 +258,7 @@ Before installing, delete the old `version.dll` and the old `Mods\wheelspeed\` f
 from the game root. If the 1.x `version.dll` is still there, the loader does not load
 the new mod and writes a message starting with `[!!]` to `MixedNuts\loader.log`.
 
-If you also have the 1.x versions of Native 120FPS Option (`dinput8.dll` +
+If you also have the 1.x versions of Native120FPSOption (`dinput8.dll` +
 `Mods\native120fps\`) or TwinSwap (`xinput1_4.dll` + `Mods\twinswap\`), update them all
 at once. See the loader's README for details.
 

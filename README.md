@@ -1,4 +1,4 @@
-# Mouse Wheel Camera Speed
+# MouseWheelCameraSpeed
 
 **FATAL FRAME II: Crimson Butterfly REMAKE**（零 〜紅い蝶〜 REMAKE / Steam AppID 3920610）用の Mod です。
 A mod for FATAL FRAME / PROJECT ZERO II: Crimson Butterfly REMAKE (Steam, AppID 3920610).
@@ -19,11 +19,11 @@ repeats every frame while the button is held, so it feels fine, but a mouse whee
 counts as a single input, so going from one end to the other takes an enormous amount
 of scrolling. The game has no setting for this.
 
-> **2.0.0 から [MixedNuts Mod Loader](https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader)
+> **2.0.0 から [MixedNutsModLoader](https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader)
 > （1.0.0 以降）が必要です。** ローダーは別途導入してください。1.x は `version.dll` で
 > 単独で動作していましたが、2.0.0 はローダーのプラグインになり、`version.dll` は同梱していません。
 >
-> **2.0.0 requires [MixedNuts Mod Loader](https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader)
+> **2.0.0 requires [MixedNutsModLoader](https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader)
 > (1.0.0 or later)**, installed separately. 1.x ran on its own via `version.dll`; 2.0.0 is a
 > loader plugin and no longer ships `version.dll`.
 
@@ -31,7 +31,7 @@ of scrolling. The game has no setting for this.
 
 **ビルドは不要です。**
 
-1. 先に MixedNuts Mod Loader を導入します（ローダーの
+1. 先に MixedNutsModLoader を導入します（ローダーの
    [Releases](https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader/releases) か [Nexus Mods](https://www.nexusmods.com/fatalframe2crimsonbutterflyremake/mods/26) から
    ダウンロードし、ローダーの README に従ってください）
 2. この Mod の [Releases](../../releases) から配布物をダウンロードし、中身の `MixedNuts`
@@ -40,7 +40,7 @@ of scrolling. The game has no setting for this.
 
 **No build required.**
 
-1. Install MixedNuts Mod Loader first (download it from the loader's
+1. Install MixedNutsModLoader first (download it from the loader's
    [Releases](https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader/releases) or [Nexus Mods](https://www.nexusmods.com/fatalframe2crimsonbutterflyremake/mods/26) and
    follow its README).
 2. Download this mod from [Releases](../../releases) and copy its `MixedNuts` folder into
@@ -50,8 +50,8 @@ of scrolling. The game has no setting for this.
 ```
 FatalFrameII/
   FatalFrameII.exe
-  dinput8.dll                                <- MixedNuts Mod Loader
-  MixedNuts/MixedNutsLoader.dll              <- MixedNuts Mod Loader
+  dinput8.dll                                <- MixedNutsModLoader
+  MixedNuts/MixedNutsLoader.dll              <- MixedNutsModLoader
   MixedNuts/Mods/wheelspeed/wheelspeed.dll   <- この Mod / this mod
   MixedNuts/Mods/wheelspeed/wheelspeed.ini
   MixedNuts/Mods/wheelspeed/README.md
@@ -75,7 +75,7 @@ To disable temporarily, set `Enabled=0` in `wheelspeed.ini`.
 削除してください。1.x の `version.dll` が残っていると、ローダーは新しい Mod を読み込まず、
 `MixedNuts\loader.log` に `[!!]` で始まるメッセージを書き出します。
 
-Native 120FPS Option（`dinput8.dll` + `Mods\native120fps\`）や TwinSwap
+Native120FPSOption（`dinput8.dll` + `Mods\native120fps\`）や TwinSwap
 （`xinput1_4.dll` + `Mods\twinswap\`）の 1.x も入れている場合は、まとめて更新してください。
 詳しくはローダーの README を参照してください。
 
@@ -83,16 +83,16 @@ Before installing, delete the old `version.dll` and the old `Mods\wheelspeed\` f
 from the game root. If the 1.x `version.dll` is still there, the loader does not load
 the new mod and writes a message starting with `[!!]` to `MixedNuts\loader.log`.
 
-If you also have the 1.x versions of Native 120FPS Option (`dinput8.dll` +
+If you also have the 1.x versions of Native120FPSOption (`dinput8.dll` +
 `Mods\native120fps\`) or TwinSwap (`xinput1_4.dll` + `Mods\twinswap\`), update them all
 at once. See the loader's README for details.
 
 ## 他の MixedNuts の Mod との併用 / Using it with other MixedNuts mods
 
-**干渉しません。** Native 120FPS Option、Mouse Wheel Camera Speed、TwinSwap の 2.0.0 は
+**干渉しません。** Native120FPSOption、MouseWheelCameraSpeed、TwinSwap の 2.0.0 は
 すべて同じローダーの上で動くため、DLL を 1 つ共有し、競合することはありません。
 
-**They do not conflict.** Native 120FPS Option, Mouse Wheel Camera Speed and TwinSwap
+**They do not conflict.** Native120FPSOption, MouseWheelCameraSpeed and TwinSwap
 2.0.0 all run on the same loader, so they share one DLL.
 
 別の Mod が既に `dinput8.dll` を使っている場合は、上書きしないでください。ローダーの
