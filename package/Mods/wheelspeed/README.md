@@ -11,7 +11,7 @@ Created by MixedNuts
 `version.dll`; 2.0.0 is a loader plugin.
 
 Nexus Mods: https://www.nexusmods.com/fatalframe2crimsonbutterflyremake/mods/26
-GitHub: https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader
+GitHub: https://github.com/MixedNutsJP/fatal-frame2-remake-mod-loader
 
 ---
 
@@ -33,7 +33,7 @@ GitHub: https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader
 - FATAL FRAME II: Crimson Butterfly REMAKE（Steam 版）
 - MixedNutsModLoader 1.0.0 以降（別途導入。ローダーの Releases からダウンロードしてください）
   Nexus Mods: https://www.nexusmods.com/fatalframe2crimsonbutterflyremake/mods/26
-  GitHub: https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader
+  GitHub: https://github.com/MixedNutsJP/fatal-frame2-remake-mod-loader
 
 ゲームのファイルは一切変更せず、メモリ上の値を書き換えるだけなので、Steam の
 ファイル整合性チェックに引っかかることはありません。
@@ -167,7 +167,7 @@ Native120FPSOption（`dinput8.dll` + `Mods\native120fps\`）や TwinSwap
 不具合を報告するときは、GitHub の Issue で `MixedNuts\Mods\wheelspeed\wheelspeed.log` と
 `MixedNuts\loader.log` の両方を添付してください。
 
-https://github.com/MixedNuts-Dev/fatal-frame2-remake-mouse-wheel-camera-speed/issues
+https://github.com/MixedNutsJP/fatal-frame2-remake-mouse-wheel-camera-speed/issues
 
 ## 仕組み
 
@@ -201,7 +201,7 @@ enormous amount of scrolling. The game has no setting for this.
 - MixedNutsModLoader 1.0.0 or later (installed separately; download it from the
   loader's Releases)
   Nexus Mods: https://www.nexusmods.com/fatalframe2crimsonbutterflyremake/mods/26
-  GitHub: https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader
+  GitHub: https://github.com/MixedNutsJP/fatal-frame2-remake-mod-loader
 
 No game files are modified; the mod only changes values in memory, so this will not
 trip Steam's file integrity verification.
@@ -334,7 +334,7 @@ display, GPU, OS and locale.
 When reporting a problem, please open a GitHub Issue and attach both
 `MixedNuts\Mods\wheelspeed\wheelspeed.log` and `MixedNuts\loader.log`.
 
-https://github.com/MixedNuts-Dev/fatal-frame2-remake-mouse-wheel-camera-speed/issues
+https://github.com/MixedNutsJP/fatal-frame2-remake-mouse-wheel-camera-speed/issues
 
 ## How it works
 
@@ -360,4 +360,4 @@ MIT License — Copyright (c) 2026 MixedNuts
 This software is provided under the MIT License. You are free to redistribute and
 modify it, but the copyright notice and the license text must be retained.
 
-https://github.com/MixedNuts-Dev/fatal-frame2-remake-mouse-wheel-camera-speed
+https://github.com/MixedNutsJP/fatal-frame2-remake-mouse-wheel-camera-speed

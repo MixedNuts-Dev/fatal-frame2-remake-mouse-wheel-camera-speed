@@ -19,11 +19,11 @@ repeats every frame while the button is held, so it feels fine, but a mouse whee
 counts as a single input, so going from one end to the other takes an enormous amount
 of scrolling. The game has no setting for this.
 
-> **2.0.0 から [MixedNutsModLoader](https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader)
+> **2.0.0 から [MixedNutsModLoader](https://github.com/MixedNutsJP/fatal-frame2-remake-mod-loader)
 > （1.0.0 以降）が必要です。** ローダーは別途導入してください。1.x は `version.dll` で
 > 単独で動作していましたが、2.0.0 はローダーのプラグインになり、`version.dll` は同梱していません。
 >
-> **2.0.0 requires [MixedNutsModLoader](https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader)
+> **2.0.0 requires [MixedNutsModLoader](https://github.com/MixedNutsJP/fatal-frame2-remake-mod-loader)
 > (1.0.0 or later)**, installed separately. 1.x ran on its own via `version.dll`; 2.0.0 is a
 > loader plugin and no longer ships `version.dll`.
 
@@ -32,7 +32,7 @@ of scrolling. The game has no setting for this.
 **ビルドは不要です。**
 
 1. 先に MixedNutsModLoader を導入します（ローダーの
-   [Releases](https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader/releases) か [Nexus Mods](https://www.nexusmods.com/fatalframe2crimsonbutterflyremake/mods/26) から
+   [Releases](https://github.com/MixedNutsJP/fatal-frame2-remake-mod-loader/releases) か [Nexus Mods](https://www.nexusmods.com/fatalframe2crimsonbutterflyremake/mods/26) から
    ダウンロードし、ローダーの README に従ってください）
 2. この Mod の [Releases](../../releases) から配布物をダウンロードし、中身の `MixedNuts`
    フォルダを、ゲームのルート（`FatalFrameII.exe` と同じ場所）にそのままコピーします。
@@ -41,7 +41,7 @@ of scrolling. The game has no setting for this.
 **No build required.**
 
 1. Install MixedNutsModLoader first (download it from the loader's
-   [Releases](https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader/releases) or [Nexus Mods](https://www.nexusmods.com/fatalframe2crimsonbutterflyremake/mods/26) and
+   [Releases](https://github.com/MixedNutsJP/fatal-frame2-remake-mod-loader/releases) or [Nexus Mods](https://www.nexusmods.com/fatalframe2crimsonbutterflyremake/mods/26) and
    follow its README).
 2. Download this mod from [Releases](../../releases) and copy its `MixedNuts` folder into
    the game's root directory (the folder containing `FatalFrameII.exe`). It merges into
@@ -121,13 +121,13 @@ for both.
 Visual Studio 2022 の C++ ツールセットが必要です。
 Requires the Visual Studio 2022 C++ toolset.
 
-共通コード（[mod-loader](https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader)）を
+共通コード（[mod-loader](https://github.com/MixedNutsJP/fatal-frame2-remake-mod-loader)）を
 submodule で取り込んでいるので、`--recursive` 付きで clone してください。
-The shared code ([mod-loader](https://github.com/MixedNuts-Dev/fatal-frame2-remake-mod-loader))
+The shared code ([mod-loader](https://github.com/MixedNutsJP/fatal-frame2-remake-mod-loader))
 is a git submodule, so clone with `--recursive`.
 
 ```
-git clone --recursive https://github.com/MixedNuts-Dev/fatal-frame2-remake-mouse-wheel-camera-speed.git
+git clone --recursive https://github.com/MixedNutsJP/fatal-frame2-remake-mouse-wheel-camera-speed.git
 build.bat
 ```
 

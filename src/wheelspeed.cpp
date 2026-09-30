@@ -1,5 +1,5 @@
 // FATAL FRAME II: Crimson Butterfly REMAKE — Mouse Wheel Camera Speed
-// Created by MixedNuts - https://github.com/MixedNuts-Dev/fatal-frame2-remake-mouse-wheel-camera-speed
+// Created by MixedNuts - https://github.com/MixedNutsJP/fatal-frame2-remake-mouse-wheel-camera-speed
 // Licensed under the MIT License. See LICENSE for details.
 //
 // 射影機のズームとピントは、入力 1 回ごとに決まった量（ズーム 0.6 度 / ピント 4.0）
